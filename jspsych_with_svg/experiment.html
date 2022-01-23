@@ -16,7 +16,43 @@
   <script>
     /* create timeline */
     var timeline = [];
-
+    slides = [
+      {
+        url: 'https://raw.githubusercontent.com/rivkavizen/goal-recognition-2d/master/docs/svg/slide09.svg',
+        prompt:
+          '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide10.svg',
+        prompt:
+          '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide11.svg',
+        prompt:
+          '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide12.svg',
+        prompt:
+          '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide13.svg',
+        prompt:
+          '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide14.svg',
+        prompt:
+          '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+      },
+      {
+        url: 'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide15.svg',
+        prompt:
+          '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+      },
+    ];
     // /* preload images */
     // var preload = {
     //   type: 'preload',
@@ -41,32 +77,14 @@
     };
     timeline.push(welcome);
 
-    var sort_trial = {
-      type: 'free-sort',
-      stim_path:
-        'https://raw.githubusercontent.com/rivkavizen/goal-recognition-2d/master/docs/svg/slide09.svg',
-      prompt:
-        '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
-    };
-    timeline.push(sort_trial);
-
-    sort_trial = {
-      type: 'free-sort',
-      stim_path:
-        'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide10.svg',
-      prompt:
-        '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
-    };
-    timeline.push(sort_trial);
-
-    sort_trial = {
-      type: 'free-sort',
-      stim_path:
-        'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide154.svg',
-      prompt:
-        '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
-    };
-    timeline.push(sort_trial);
+    for (var i = 0; i < slides.length; i++) {
+      var sort_trial = {
+        type: 'free-sort',
+        stim_path: slides[i]['url'],
+        prompt: slides[i]['prompt'],
+      };
+      timeline.push(sort_trial);
+    }
 
     /* start the experiment */
     jsPsych.init({
