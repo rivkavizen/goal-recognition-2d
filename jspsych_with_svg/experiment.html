@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="jspsych-6.3.0/jspsych.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-free-sort.js"></script>
+    <!-- <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script> -->
+    <link
+      href="jspsych-6.3.0/css/jspsych.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body></body>
+  <script>
+    /* create timeline */
+    var timeline = [];
+
+    // /* preload images */
+    // var preload = {
+    //   type: 'preload',
+    //   images: [
+    //     'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide154.svg',
+    //     'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide03.svg',
+    //   ],
+    //   on_success: function (file) {
+    //     console.log('File loaded: ', file);
+    //   },
+    //   on_error: function (file) {
+    //     console.log('Error loading file: ', file);
+    //   },
+    // };
+
+    // timeline.push(preload);
+
+    /* define welcome message trial */
+    var welcome = {
+      type: 'html-keyboard-response',
+      stimulus: 'Welcome to the experiment. Press any key to begin.',
+    };
+    timeline.push(welcome);
+
+    var sort_trial = {
+      type: 'free-sort',
+      stim_path:
+        'https://raw.githubusercontent.com/rivkavizen/goal-recognition-2d/master/docs/svg/slide09.svg',
+      prompt:
+        '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+    };
+    timeline.push(sort_trial);
+
+    sort_trial = {
+      type: 'free-sort',
+      stim_path:
+        'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide10.svg',
+      prompt:
+        '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+    };
+    timeline.push(sort_trial);
+
+    sort_trial = {
+      type: 'free-sort',
+      stim_path:
+        'https://raw.githubusercontent.com/rivkavizenexp/goal-recognition-2d/master/docs/svg/slide154.svg',
+      prompt:
+        '<p>Click and drag the images below to sort them so that similar items are close together.</p>',
+    };
+    timeline.push(sort_trial);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      on_finish: function () {
+        jsPsych.data.displayData();
+      },
+    });
+  </script>
+</html>
