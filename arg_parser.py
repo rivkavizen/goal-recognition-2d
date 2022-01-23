@@ -1,19 +1,59 @@
-from shapes.shape_update import ShapeUpdate
-from mturk.MturkHandler import MturkHandler
+import math
 import random
+import numpy as np
+from copy import deepcopy
+from itertools import cycle, islice
+from mturk.MturkHandler import MturkHandler
+from shapes.shape_update import ShapeUpdate
 
 
-def choose_random_slides():
-    # Add the range of each subject
-    subjects = [range(2, 41), range(41, 131), range(131, 163)]
+def shuffle_list_of_lists(list_of_lists):
+    list_of_lists_copy = deepcopy(list_of_lists)
+    for lst in list_of_lists_copy:
+        random.shuffle(lst)
+    return list_of_lists_copy
 
-    slides_lst = []
 
-    for subj in subjects:
-        # k says how many slides to take from each subject
-        slides_lst += random.sample(subj, k=3)
+def calculate_new_list_size(max_list_size, num_of_lists, bucket_size):
+    amount_of_items = max_list_size * num_of_lists
+    if amount_of_items % bucket_size == 0:
+        return max_list_size
 
-    return slides_lst
+    delta_list_size = math.ceil(bucket_size / num_of_lists)
+    new_list_size = max_list_size + delta_list_size
+    return new_list_size
+
+
+def expand_list_size(lst, new_size):
+    if len(lst) == new_size:
+        return lst
+    return list(islice(cycle(lst), new_size))
+
+
+def flat_2_dim_list_by_columns(list_of_lists):
+    flat_list = np.array(list_of_lists).flatten('F').tolist()
+    return flat_list
+
+
+def split_list_into_buckets(lst, bucket_size, num_of_buckets):
+    arr = np.array(lst)
+    arr.resize(num_of_buckets * bucket_size)
+    buckets = arr.reshape((num_of_buckets, bucket_size))
+    return buckets.tolist()
+
+
+def create_buckets(list_of_lists, bucket_size):
+    num_of_lists = len(list_of_lists)
+    max_list_size = len(max(list_of_lists, key=len))
+    new_list_size = calculate_new_list_size(max_list_size, num_of_lists, bucket_size=bucket_size)
+    num_of_buckets = (new_list_size * num_of_lists) // bucket_size
+
+    list_of_lists = shuffle_list_of_lists(list_of_lists)
+
+    list_of_lists = [expand_list_size(lst, new_list_size) for lst in list_of_lists]
+    slides_list = flat_2_dim_list_by_columns(list_of_lists)
+    slides_buckets = split_list_into_buckets(slides_list, bucket_size, num_of_buckets)
+    return slides_buckets
 
 
 def parse_subccmd(sub_cmd, arguments):
@@ -44,10 +84,13 @@ def parse_mturk(args):
         title = args['title']
         slides_lst = args['choose']
 
-        if slides_lst is None:
-            slides_lst = choose_random_slides()
-
-        mturk_write(title, slides_lst)
+        if slides_lst is not None:
+            mturk_write(title, slides_lst)
+        else:
+            list_of_lists = [list(range(2, 41)), list(range(41, 131)), list(range(131, 163))]
+            slides_buckets = create_buckets(list_of_lists=list_of_lists, bucket_size=5)
+            for bucket in slides_buckets:
+                mturk_write(title, bucket)
 
 
 def mturk_read():
